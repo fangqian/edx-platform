@@ -33,7 +33,7 @@ $(function(){
         <ul id="booknav">
           % for (index, entry) in enumerate(textbook['chapters']):
           <li>
-            <a class="chapter" rel="${entry['url']}" href="#">${entry.get('title')}</a>
+            <a class="chapter" rel="${entry['url']}" href="#viewer-frame">${entry.get('title')}</a>
           </li>
           % endfor
         </ul>
@@ -48,6 +48,7 @@ $(function(){
     width="856"
     height="1108"
     frameborder="0"
+    tabindex="-1"
     seamless></iframe>
     </div>
     </div>

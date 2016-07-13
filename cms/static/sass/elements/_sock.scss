@@ -29,6 +29,7 @@
     .cta-show-sock {
       @extend %ui-btn-pill;
       @extend %t-action4;
+      border: 0;
       background: $gray-l5;
       padding: ($baseline/2) $baseline;
       color: $gray-d2;

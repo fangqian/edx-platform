@@ -55,7 +55,7 @@ def marketing_link(name):
             return reverse(link_map[name])
     else:
         log.debug("Cannot find corresponding link for name: %s", name)
-        return '#'
+        return '/'
 
 
 def is_any_marketing_link_set(names):

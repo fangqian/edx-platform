@@ -61,7 +61,6 @@ class TextbooksTest(StudioCourseTest):
         self.textbook_view_page.a11y_audit.config.set_rules({
             'ignore': [
                 'skip-link',  # AC-501
-                'link-href',  # AC-502
                 'section'  # AC-503
             ],
         })
@@ -83,7 +82,6 @@ class TextbooksTest(StudioCourseTest):
                 'html-lang',  # AC-504
                 'meta-viewport',  # AC-505
                 'skip-link',  # AC-506
-                'link-href',  # AC-507
             ],
         })
         self.textbook_view_page.a11y_audit.check_for_accessibility_errors()

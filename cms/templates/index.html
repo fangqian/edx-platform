@@ -28,15 +28,15 @@ from openedx.core.djangolib.markup import HTML, Text
       <ul>
         <li class="nav-item">
           % if course_creator_status=='granted':
-          <a href="#" class="button new-button new-course-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
-              ${_("New Course")}</a>
+          <button type="button" class="button new-button new-course-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
+              ${_("New Course")}</button>
           % elif course_creator_status=='disallowed_for_this_site' and settings.FEATURES.get('STUDIO_REQUEST_EMAIL',''):
           <a href="mailto:${settings.FEATURES.get('STUDIO_REQUEST_EMAIL','')}">${_("Email staff to create course")}</a>
           % endif
 
           % if show_new_library_button:
-            <a href="#" class="button new-button new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
-            ${_("New Library")}</a>
+            <button type="button" class="button new-button new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
+            ${_("New Library")}</button>
           % endif
 
           % if is_programs_enabled:
@@ -508,7 +508,7 @@ from openedx.core.djangolib.markup import HTML, Text
 
         <ul class="list-actions">
           <li class="action-item">
-              <a href="#" class="action-primary action-create new-button action-create-library new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span> ${_('Create Your First Library')}</a>
+              <button type="button" class="action-primary action-create new-button action-create-library new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span> ${_('Create Your First Library')}</button>
           </li>
         </ul>
         </div>
