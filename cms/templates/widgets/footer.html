@@ -1,6 +1,9 @@
+<%page expression_filter="h"/>
+
 <%!
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from openedx.core.djangolib.markup import HTML, Text
 %>
 
 <div class="wrapper-footer wrapper">
@@ -34,9 +37,9 @@ from django.core.urlresolvers import reverse
         ## Site operators: Please do not remove this paragraph! This attributes back to edX and makes your acknowledgement of edX's trademarks clear.
         <p>
           ## Translators: 'EdX', 'edX', 'Studio', and 'Open edX' are trademarks of 'edX Inc.'. Please do not translate any of these trademarks and company names.
-          ${_("EdX, Open edX, Studio, and the edX and Open edX logos are registered trademarks or trademarks of {link_start}edX Inc.{link_end}").format(
-            link_start=u"<a data-rel='edx.org' href='https://www.edx.org/'>",
-            link_end=u"</a>"
+          ${Text(_("EdX, Open edX, Studio, and the edX and Open edX logos are registered trademarks or trademarks of {link_start}edX Inc.{link_end}")).format(
+            link_start=HTML('<a data-rel="edx.org" href="https://www.edx.org/">'),
+            link_end=HTML('</a>')
           )}
         </p>
       </div>
