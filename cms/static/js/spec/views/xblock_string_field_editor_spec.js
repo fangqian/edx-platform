@@ -1,6 +1,7 @@
 define(["jquery", "edx-ui-toolkit/js/utils/spec-helpers/ajax-helpers", "common/js/spec_helpers/template_helpers",
-        "js/spec_helpers/edit_helpers", "js/models/xblock_info", "js/views/xblock_string_field_editor"],
-       function ($, AjaxHelpers, TemplateHelpers, EditHelpers, XBlockInfo, XBlockStringFieldEditor) {
+        "js/spec_helpers/edit_helpers", "js/models/xblock_info", "js/views/xblock_string_field_editor",
+        "edx-ui-toolkit/js/utils/html-utils"],
+       function ($, AjaxHelpers, TemplateHelpers, EditHelpers, XBlockInfo, XBlockStringFieldEditor, HtmlUtils) {
            describe("XBlockStringFieldEditorView", function () {
                var initialDisplayName, updatedDisplayName, getXBlockInfo, getFieldEditorView;
 
@@ -28,13 +29,26 @@ define(["jquery", "edx-ui-toolkit/js/utils/spec-helpers/ajax-helpers", "common/j
                    initialDisplayName = "Default Display Name";
                    updatedDisplayName = "Updated Display Name";
                    TemplateHelpers.installTemplate('xblock-string-field-editor');
+                //    appendSetFixtures(
+                //            '<div class="wrapper-xblock-field incontext-editor is-editable"' +
+                //            'data-field="display_name" data-field-display-name="Display Name">' +
+                //            '<h1 class="page-header-title xblock-field-value incontext-editor-value">' +
+                //            '<span class="title-value">' + initialDisplayName + '</span>' +
+                //            '</h1>' +
+                //            '</div>'
+                //    );
                    appendSetFixtures(
-                           '<div class="wrapper-xblock-field incontext-editor is-editable"' +
-                           'data-field="display_name" data-field-display-name="Display Name">' +
-                           '<h1 class="page-header-title xblock-field-value incontext-editor-value">' +
-                           '<span class="title-value">' + initialDisplayName + '</span>' +
-                           '</h1>' +
-                           '</div>'
+                       HtmlUtils.interpolateHtml(
+                           HtmlUtils.joinHtml(
+                               HtmlUtils.HTML('<div class="wrapper-xblock-field incontext-editor is-editable" data-field="display_name" data-field-display-name="Display Name">'),
+                               HtmlUtils.HTML('<h1 class="page-header-title xblock-field-value incontext-editor-value">'),
+                               HtmlUtils.HTML('<span class="title-value">{text}</span>'),
+                               HtmlUtils.HTML('</h1>'),
+                               HtmlUtils.HTML('</div>')
+                           )
+                       ), {
+                           text: initialDisplayName
+                       }
                    );
                });
 
@@ -137,7 +151,7 @@ define(["jquery", "edx-ui-toolkit/js/utils/spec-helpers/ajax-helpers", "common/j
                    };
 
                    it('renders single quotes in input field', function () {
-                       expectInputMatchesModelDisplayName('Updated \'Display Name\'');
+                       expectInputMatchesModelDisplayName("Updated 'Display Name'");
                    });
 
                    it('renders double quotes in input field', function () {
