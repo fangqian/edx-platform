@@ -137,7 +137,7 @@ define(["jquery", "edx-ui-toolkit/js/utils/spec-helpers/ajax-helpers", "common/j
                    };
 
                    it('renders single quotes in input field', function () {
-                       expectInputMatchesModelDisplayName("Updated 'Display Name'");
+                       expectInputMatchesModelDisplayName('Updated \'Display Name\'');
                    });
 
                    it('renders double quotes in input field', function () {
