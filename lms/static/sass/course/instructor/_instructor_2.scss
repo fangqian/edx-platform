@@ -135,6 +135,13 @@
     }
   }
   
+    .btn-link {
+        
+        &.active-section {
+            color: $base-font-color;
+        }
+    }
+  
     .btn-blue {
         @extend %btn-primary-blue;
         margin-bottom: 0;
