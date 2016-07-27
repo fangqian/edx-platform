@@ -1643,19 +1643,22 @@ class IsCoursePassedTests(ModuleStoreTestCase):
         # If user has not grade then false will return
         self.assertFalse(views.is_course_passed(self.course, None, self.student, self.request))
 
-    @patch('lms.djangoapps.grades.course_grades.summary', Mock(return_value={'percent': 0.9}))
+    @patch('lms.djangoapps.grades.new.course_grade.CourseGrade.summary', PropertyMock(return_value={'percent': 0.9}))
     def test_user_pass_if_percent_appears_above_passing_point(self):
         # Mocking the grades.grade
         # If user has above passing marks then True will return
         self.assertTrue(views.is_course_passed(self.course, None, self.student, self.request))
 
-    @patch('lms.djangoapps.grades.course_grades.summary', Mock(return_value={'percent': 0.2}))
+    @patch('lms.djangoapps.grades.new.course_grade.CourseGrade.summary', PropertyMock(return_value={'percent': 0.2}))
     def test_user_fail_if_percent_appears_below_passing_point(self):
         # Mocking the grades.grade
         # If user has below passing marks then False will return
         self.assertFalse(views.is_course_passed(self.course, None, self.student, self.request))
 
-    @patch('lms.djangoapps.grades.course_grades.summary', Mock(return_value={'percent': SUCCESS_CUTOFF}))
+    @patch(
+        'lms.djangoapps.grades.new.course_grade.CourseGrade.summary',
+        PropertyMock(return_value={'percent': SUCCESS_CUTOFF})
+    )
     def test_user_with_passing_marks_and_achieved_marks_equal(self):
         # Mocking the grades.grade
         # If user's achieved passing marks are equal to the required passing
