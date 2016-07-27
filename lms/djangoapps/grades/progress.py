@@ -8,4 +8,4 @@ def summary(student, course):
     """
     Returns the CourseGrade for the given course and student.
     """
-    return CourseGradeFactory.create(student, course)
+    return CourseGradeFactory(student).create(course)

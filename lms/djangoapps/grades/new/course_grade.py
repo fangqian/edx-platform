@@ -175,28 +175,28 @@ class CourseGradeFactory(object):
     """
     Factory class to create Course Grade objects
     """
-    @classmethod
-    def create(cls, student, course):
+    def __init__(self, student):
+        self.student = student
+
+    def create(self, course):
         """
         Returns the CourseGrade object for the given student and course.
         """
-        course_structure = get_course_blocks(student, course.location)
+        course_structure = get_course_blocks(self.student, course.location)
         return (
-            cls._get_saved_grade(student, course, course_structure) or
-            cls._compute_and_update_grade(student, course, course_structure)
+            self._get_saved_grade(course, course_structure) or
+            self._compute_and_update_grade(course, course_structure)
         )
 
-    @classmethod
-    def _compute_and_update_grade(cls, student, course, course_structure):
+    def _compute_and_update_grade(self, course, course_structure):
         """
         Freshly computes and updates the grade for the student and course.
         """
-        course_grade = CourseGrade(student, course, course_structure)
+        course_grade = CourseGrade(self.student, course, course_structure)
         course_grade.compute()
         return course_grade
 
-    @classmethod
-    def _get_saved_grade(cls, student, course, course_structure):  # pylint: disable=unused-argument
+    def _get_saved_grade(self, course, course_structure):  # pylint: disable=unused-argument
         """
         Returns the saved grade for the given course and student.
         """

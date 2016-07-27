@@ -59,4 +59,4 @@ def summary(student, course):
 
     Also sends a signal to update the minimum grade requirement status.
     """
-    return CourseGradeFactory.create(student, course).summary
+    return CourseGradeFactory(student).create(course).summary
