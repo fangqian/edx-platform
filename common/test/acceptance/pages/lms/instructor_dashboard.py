@@ -23,7 +23,7 @@ class InstructorDashboardPage(CoursePage):
         """
         Selects the membership tab and returns the MembershipSection
         """
-        self.q(css='[data-section=membership]').first.click()
+        self.q(css='[data-section="membership"]').first.click()
         membership_section = MembershipPage(self.browser)
         membership_section.wait_for_page()
         return membership_section
@@ -32,7 +32,7 @@ class InstructorDashboardPage(CoursePage):
         """
         Selects the cohort management tab and returns the CohortManagementSection
         """
-        self.q(css='[data-section=cohort_management]').first.click()
+        self.q(css='[data-section="cohort_management"]').first.click()
         cohort_management_section = CohortManagementSection(self.browser)
         # The first time cohort management is selected, an ajax call is made.
         cohort_management_section.wait_for_ajax()
@@ -43,7 +43,7 @@ class InstructorDashboardPage(CoursePage):
         """
         Selects the data download tab and returns a DataDownloadPage.
         """
-        self.q(css='[data-section=data_download]').first.click()
+        self.q(css='[data-section="data_download"]').first.click()
         data_download_section = DataDownloadPage(self.browser)
         data_download_section.wait_for_page()
         return data_download_section
@@ -52,7 +52,7 @@ class InstructorDashboardPage(CoursePage):
         """
         Selects the student admin tab and returns the MembershipSection
         """
-        self.q(css='[data-section=student_admin]').first.click()
+        self.q(css='[data-section="student_admin"]').first.click()
         student_admin_section = StudentAdminPage(self.browser)
         student_admin_section.wait_for_page()
         return student_admin_section
@@ -61,7 +61,7 @@ class InstructorDashboardPage(CoursePage):
         """
         Selects the certificates tab and returns the CertificatesSection
         """
-        self.q(css='[data-section=certificates]').first.click()
+        self.q(css='[data-section="certificates"]').first.click()
         certificates_section = CertificatesPage(self.browser)
         certificates_section.wait_for_page()
         return certificates_section
@@ -70,7 +70,7 @@ class InstructorDashboardPage(CoursePage):
         """
         Selects the timed exam tab and returns the Special Exams Section
         """
-        self.q(css='[data-section=special_exams]').first.click()
+        self.q(css='[data-section="special_exams"]').first.click()
         timed_exam_section = SpecialExamsPage(self.browser)
         timed_exam_section.wait_for_page()
         return timed_exam_section
@@ -79,7 +79,7 @@ class InstructorDashboardPage(CoursePage):
         """
         Selects the email tab and returns the bulk email section
         """
-        self.q(css='[data-section=send_email]').first.click()
+        self.q(css='[data-section="send_email"]').first.click()
         email_section = BulkEmailPage(self.browser)
         email_section.wait_for_page()
         return email_section
