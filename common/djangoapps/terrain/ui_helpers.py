@@ -534,6 +534,12 @@ def css_fill(css_selector, text, index=0):
 def click_link(partial_text, index=0):
     retry_on_exception(lambda: world.browser.find_link_by_partial_text(partial_text)[index].click())
     wait_for_js_to_load()
+    
+    
+@world.absorb
+def click_button(data_attr, index=0):
+    retry_on_exception(lambda: world.browser.find_element_by_css_selector(data_attr)[index].click())
+    wait_for_js_to_load()
 
 
 @world.absorb
