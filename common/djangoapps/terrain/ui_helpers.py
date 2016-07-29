@@ -538,7 +538,10 @@ def click_link(partial_text, index=0):
 
 @world.absorb
 def click_button(data_attr, index=0):
-    retry_on_exception(world.browser.find_element_by_css_selector(data_attr)[index].click())
+    xpath = '//button[text()="{button_text}"]'.format(
+        button_text=data_attr
+    )
+    world.browser.find_by_xpath(xpath)[index].click()
     wait_for_js_to_load()
 
 
