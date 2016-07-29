@@ -207,7 +207,7 @@ class TestInstructorDashboard(ModuleStoreTestCase, LoginEnrollmentTestCase, XssT
         Test analytics dashboard message is shown
         """
         response = self.client.get(self.url)
-        button = '<li class="nav-item"><button type="button" class="btn-link" data-section="instructor_analytics">Analytics</button></li>'
+        button = '<li class="nav-item"><button type="button" class="btn-link" data-section="instructor_analytics">Analytics</button></li>'  # pylint: disable=line-too-long
         analytics_section = button
         self.assertTrue(analytics_section in response.content)
 
