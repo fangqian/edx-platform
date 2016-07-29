@@ -53,6 +53,7 @@ class TestProgramRetrieval(ProgramsApiConfigMixin, ProgramsDataMixin, Credential
 
         ClientFactory(name=ProgramsApiConfig.OAUTH2_CLIENT_NAME, client_type=CONFIDENTIAL)
         self.user = UserFactory()
+        self.program = {'name': 'foo_program', 'id': 123, 'marketing_slug': 'foo_slug'}
 
         cache.clear()
 
@@ -76,6 +77,27 @@ class TestProgramRetrieval(ProgramsApiConfigMixin, ProgramsDataMixin, Credential
                 )
             )
         ]
+
+    def test_get_program_detail_url(self):
+        """Verify url generation respects config setting for programs detail page toggle"""
+
+        #Set up expected test values
+        self.create_programs_config()
+
+        #Confirm that with toggle set to true - link rendered is for detail page
+        expected_program_detail_url = utils.get_program_detail_url(self.program, "bar")
+        self.assertTrue("foo_program" in expected_program_detail_url)
+
+    def test_get_program_detail_url_marketing(self):
+        """Verify url generation respects config setting for programs detail page toggle - set to false"""
+
+        #Set toggle to false
+        config = self.create_programs_config(program_details_enabled=False)
+
+        #Confirm that with toggle set to false - link rendered is for marketing slug
+        expected_marketing_slug_url = utils.get_program_detail_url(self.program, "bar")
+        self.assertTrue("foo_slug" in expected_marketing_slug_url)
+
 
     @httpretty.activate
     def test_get_programs(self):

@@ -1,4 +1,4 @@
-<%page args="course_overview, enrollment, show_courseware_link, cert_status, can_unenroll, credit_status, show_email_settings, course_mode_info, show_refund_option, is_paid_course, is_course_blocked, verification_status, course_requirements, dashboard_index, share_settings, course_program_info" expression_filter="h"/>
+<%page args="course_overview, enrollment, show_courseware_link, cert_status, can_unenroll, credit_status, show_email_settings, course_mode_info, show_refund_option, is_paid_course, is_course_blocked, verification_status, course_requirements, dashboard_index, share_settings, course_xseries_info, programs_for_course" expression_filter="h"/>
 
 <%!
 import urllib
@@ -53,10 +53,10 @@ from student.helpers import (
     <% mode_class = '' %>
   % endif
 <div class="course-container">
- % if course_program_info and course_program_info.get('category')=='xseries':
+ % if course_xseries_info and course_xseries_info.get('category')=='xseries':
   <div class="label-xseries-association">
     <span class="xseries-icon" aria-hidden="true"></span>
-    <p class="message-copy">${_("{category} Program Course").format(category=course_program_info['display_category'])}</p>
+    <p class="message-copy">${_("{category} Program Course").format(category=course_xseries_info['display_category'])}</p>
   </div>
  % endif
 <article class="course${mode_class}">
@@ -370,10 +370,14 @@ from student.helpers import (
           </div>
         %endif
 
-        % if course_program_info and course_program_info.get('category')=='xseries':
-          %for program_data in course_program_info.get('course_program_list', []):
-            <%include file = "_dashboard_xseries_info.html" args="program_data=program_data, enrollment_mode=enrollment.mode, display_category=course_program_info['display_category']" />
+        % if course_xseries_info and course_xseries_info.get('category')=='xseries':
+          %for xseries_data in course_xseries_info.get('course_program_list', []):
+            <%include file = "_dashboard_xseries_info.html" args="xseries_data=xseries_data, enrollment_mode=enrollment.mode, display_category=course_xseries_info['display_category']" />
           %endfor
+        % endif
+
+        % if programs_for_course:
+          <%include file = "_dashboard_program_info.html" args="programs_for_course=programs_for_course" />
         % endif
 
         % if is_course_blocked:

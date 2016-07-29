@@ -1,4 +1,4 @@
-<%page expression_filter="h" args="program_data, enrollment_mode, display_category" />
+<%page expression_filter="h" args="xseries_data, enrollment_mode, display_category" />
 <%!
     from django.utils.translation import ugettext as _
     from openedx.core.djangolib.markup import HTML, Text
@@ -12,10 +12,10 @@
                 </p>
                 <p class="message-copy">
                     ${Text(_("This course is 1 of {course_count} courses in the {link_start}{program_display_name}{link_end} {program_category}.")).format(
-                        course_count=program_data['course_count'],
-                        link_start=HTML('<a href="{}">').format(program_data['program_marketing_url']),
+                        course_count=xseries_data['course_count'],
+                        link_start=HTML('<a href="{}">').format(xseries_data['program_url']),
                         link_end=HTML('</a>'),
-                        program_display_name=program_data['display_name'],
+                        program_display_name=xseries_data['display_name'],
                         program_category=display_category,
                     )}
                 </p>
@@ -26,9 +26,9 @@
                 if enrollment_mode == "verified":
                     xseries_btn_class = "xseries-base-btn";
             %>
-            <a class="btn ${xseries_btn_class}" href="${program_data['program_marketing_url']}" target="_blank"
-               data-program-id="${program_data['program_id']}" >
-                <span class="sr">${program_data['display_name']}</span>
+            <a class="btn ${xseries_btn_class}" href="${xseries_data['program_url']}" target="_blank"
+               data-program-id="${xseries_data['program_id']}" >
+                <span class="sr">${xseries_data['display_name']}</span>
                 <span class="action-xseries-icon" aria-hidden="true"></span>
                 ${_("View {category} Details").format(category=display_category)}
             </a>

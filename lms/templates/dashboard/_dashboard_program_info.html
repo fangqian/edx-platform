@@ -1,0 +1,28 @@
+<%page expression_filter="h" args="programs_for_course" />
+<%!
+    from django.utils.translation import ugettext as _
+    from openedx.core.djangolib.markup import HTML, Text
+%>
+<% print "HERE" %>
+<%namespace name='static' file='../static_content.html'/>
+    <div class="message message-status is-shown credit-message">
+        <div class="xseries-action">
+            <div class="message-copy xseries-msg">
+                <span class="message-copy-bold">
+                    Programs that include this course:
+                </span>
+
+                %for program_for_course in programs_for_course.get('program_display_info', []):
+                    <%include file="icon-${program_for_course['category_lowercase']}-sm.html" />
+                    <span class="message-copy">
+                        ${Text(_("{link_start}{program_display_name}{link_end} {program_category}.")).format(
+                            link_start=HTML('<a href="{}">').format(program_for_course['program_url']),
+                            link_end=HTML('</a>'),
+                            program_display_name=program_for_course['display_name'],
+                            program_category=program_for_course['category'],
+                        )}
+                    </span>
+                %endfor
+            </div>
+        </div>
+    </div>

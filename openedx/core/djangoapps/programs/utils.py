@@ -146,6 +146,7 @@ def get_program_detail_url(program, marketing_root):
     Returns:
         str, a link to program details
     """
+    print(dir(ProgramsApiConfig))
     if ProgramsApiConfig.current().show_program_details:
         base = reverse('program_details_view', kwargs={'program_id': program['id']}).rstrip('/')
         slug = slugify(program['name'])
@@ -165,13 +166,15 @@ def get_display_category(program):
         string, the category for display to the user.
         Empty string if the program has no category or is null.
     """
-    display_candidate = ''
+    display_category = ''
     if program and program.get('category'):
         if program.get('category') == 'xseries':
-            display_candidate = 'XSeries'
+            display_category = 'XSeries'
+        elif program.get('category') == 'micromasters':
+            display_category = 'MicroMasters'
         else:
-            display_candidate = program.get('category', '').capitalize()
-    return display_candidate
+            display_category = program.get('category', '').capitalize()
+    return display_category
 
 
 def get_completed_courses(student):

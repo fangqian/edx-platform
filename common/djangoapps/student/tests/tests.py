@@ -996,7 +996,7 @@ class DashboardTestXSeriesPrograms(ModuleStoreTestCase, ProgramsApiConfigMixin):
                                 'program_id': 0,
                                 'course_count': len(course_codes),
                                 'display_name': self.program_name,
-                                'program_marketing_url': urljoin(
+                                'program_url': urljoin(
                                     settings.MKTG_URLS.get('ROOT'), 'xseries' + '/{}'
                                 ).format(marketing_slug)
                             }]
