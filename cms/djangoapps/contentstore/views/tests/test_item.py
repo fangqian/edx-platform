@@ -607,7 +607,7 @@ class TestDuplicateItem(ItemTest, DuplicateHelper):
             parent = self.get_item_from_modulestore(parent_usage_key)
             children = parent.children
             if source_position is None:
-                self.assertFalse(source_usage_key in children, 'source item not expected in children array')
+                self.assertNotIn(source_usage_key, children, 'source item not expected in children array')
                 self.assertEqual(
                     children[len(children) - 1],
                     usage_key,
@@ -968,7 +968,7 @@ class TestEditItem(TestEditItemSetup):
 
     def test_make_public(self):
         """ Test making a private problem public (publishing it). """
-        # When the problem is first created, it is only in draft (because of its category).
+        # When the problem is first created, it is only, draft (because of its category).
         self.assertFalse(self._is_location_published(self.problem_usage_key))
         self.client.ajax_post(
             self.problem_update_url,
@@ -996,7 +996,7 @@ class TestEditItem(TestEditItemSetup):
         """ Test republishing an item. """
         new_display_name = 'New Display Name'
 
-        # When the problem is first created, it is only in draft (because of its category).
+        # When the problem is first created, it is only, draft (because of its category).
         self.assertFalse(self._is_location_published(self.problem_usage_key))
 
         # Republishing when only in draft will update the draft but not cause a public item to be created.
@@ -2102,7 +2102,7 @@ class TestXBlockPublishingInfo(ItemTest):
         Returns the child xblock info at the specified index.
         """
         children = xblock_info['child_info']['children']
-        self.assertTrue(len(children) > index)
+        self.assertGreater(len(children), index)
         return children[index]
 
     def _get_xblock_info(self, location):
