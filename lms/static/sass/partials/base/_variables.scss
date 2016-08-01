@@ -442,7 +442,7 @@ $button-archive-color: rgb(238,238,238) !default; // #eeeeee
 // larger, random elements
 $dark-trans-bg: rgba(0, 0, 0, .75);
 
-$body-bg: rgb(250,250,250) !default;
+$body-bg: rgb(245, 245, 245) !default; // UXPL grayscale, x-back
 
 $container-bg: $white !default;
 
@@ -498,7 +498,7 @@ $dashboard-course-cover-border: rgb(221, 221, 221) !default;
 
 // course elements
 $content-wrapper-bg: $white !default;
-$course-bg-color: #f2f2f2 !default;
+$course-bg-color: rgb(245, 245, 245) !default; // UXPL grayscale, x-back
 $account-content-wrapper-bg: shade($body-bg, 2%) !default;
 $course-profile-bg: rgb(245,245,245) !default;
 $course-header-bg: rgba(255,255,255, 0.93) !default;
