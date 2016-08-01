@@ -387,6 +387,7 @@
                     titleVisible: this.options.titleVisible !== undefined ? this.options.titleVisible : true,
                     iconName: this.options.iconName,
                     showBlankOption: (!this.options.required || !this.modelValueIsSet()),
+                    preOptions: _.isUndefined(this.options.preOptions) ? false : this.options.preOptions,
                     selectOptions: this.options.options,
                     message: this.helpMessage
                 }));

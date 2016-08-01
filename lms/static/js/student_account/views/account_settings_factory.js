@@ -101,7 +101,7 @@
                             })
                         },
                         {
-                            view: new AccountSettingsFieldViews.DropdownFieldView({
+                            view: new AccountSettingsFieldViews.CountryFieldView({
                                 model: userAccountModel,
                                 required: true,
                                 title: gettext('Country or Region'),
@@ -111,7 +111,7 @@
                             })
                         },
                         {
-                            view: new AccountSettingsFieldViews.DropdownFieldView({
+                            view: new AccountSettingsFieldViews.TimeZoneFieldView({
                                 model: userPreferencesModel,
                                 required: true,
                                 title: gettext('Time Zone'),
@@ -121,6 +121,7 @@
                                     'time zone here, course dates, including assignment deadlines, are displayed in ' +
                                     'Coordinated Universal Time (UTC).'
                                 ),
+                                preOptions: fieldsData.time_zone.preOptions,
                                 options: fieldsData.time_zone.options,
                                 persistChanges: true
                             })

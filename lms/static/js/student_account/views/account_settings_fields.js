@@ -27,6 +27,7 @@
         HtmlUtils
     )
     {
+        var vent = _.extend({}, Backbone.Events);
 
         var AccountSettingsFieldViews = {
             ReadonlyFieldView: FieldViews.ReadonlyFieldView.extend({
@@ -77,6 +78,37 @@
                     });
                 }
 
+            }),
+            TimeZoneFieldView: FieldViews.DropdownFieldView.extend({
+                fieldTemplate: field_dropdown_account_template,
+
+                initialize: function (options) {
+                    _.bindAll(this, 'updateList');
+                    this._super(options);
+                    vent.on('change', this.updateList);
+                },
+
+                updateList: function (country_code) {
+                    var view = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/user_api/v1/preferences/time_zones/',
+                        data: {'country_code': country_code},
+                        success: function (data) {
+                            view.options.preOptions = data;
+                            view.render();
+                        }
+                    });
+                }
+
+            }),
+            CountryFieldView: FieldViews.DropdownFieldView.extend({
+                fieldTemplate: field_dropdown_account_template,
+
+                saveSucceeded: function () {
+                    vent.trigger('change', this.fieldValue);
+                    this._super();
+                }
             }),
             PasswordFieldView: FieldViews.LinkFieldView.extend({
                 fieldType: 'button',

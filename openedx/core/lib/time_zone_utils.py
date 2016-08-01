@@ -3,7 +3,7 @@ Utilities related to timezones
 """
 from datetime import datetime
 
-from pytz import common_timezones, timezone, utc
+from pytz import common_timezones, timezone, utc, country_timezones
 
 
 def get_user_time_zone(user):
@@ -57,6 +57,6 @@ def get_display_time_zone(time_zone_name):
 
 
 TIME_ZONE_CHOICES = sorted(
-    [(tz, get_display_time_zone(tz)) for tz in common_timezones],
+    [(tz, get_display_time_zone(tz)) for tz in country_timezones('US')],
     key=lambda tz_tuple: tz_tuple[1]
 )

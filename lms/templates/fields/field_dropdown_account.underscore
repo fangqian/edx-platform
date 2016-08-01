@@ -20,6 +20,14 @@
         <span class="u-field-value-readonly"></span>
     <% } else { %>
         <select name="select" id="u-field-select-<%- id %>" aria-describedby="u-field-help-message-<%- id %>">
+            <% if (preOptions) { %>
+                <optgroup label="Common Time Zone">
+                <% _.each(preOptions, function(time_zone) { %>
+                   <option value="<%- time_zone.time_zone %>"><%- time_zone.description %></option>
+                <% }); %>
+                <option disabled>──────────</option>
+                <optgroup label="All Time Zone">
+            <% } %>
             <% if (showBlankOption) { %>
                 <option value=""></option>
             <% } %>
