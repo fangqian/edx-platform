@@ -6,7 +6,7 @@ html {
 
 body {
   min-width: $fg-min-width;
-  background: rgb(245, 245, 245); // UXPL grayscale, x-back
+  background: $uxpl-grayscale-x-back;
   color: $gray-d3;
 }
 
