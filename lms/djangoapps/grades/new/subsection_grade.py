@@ -11,8 +11,6 @@ from submissions import api as submissions_api
 from xmodule import block_metadata_utils, graders
 from xmodule.graders import Score
 
-from ..models import PersistentSubsectionGradeModel
-
 
 # TODO
 # Note: If the problem weight changes after the grade is saved,
