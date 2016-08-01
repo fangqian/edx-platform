@@ -139,7 +139,7 @@ class PersistentSubsectionGradeModel(TimeStampedModel):
         model = cls.objects.create(
             user_id=kwargs['user_id'],
             course_id=kwargs['usage_key'].course_key(),
-            usage_key=kwargs['usage_key']
+            usage_key=kwargs['usage_key'],
             course_version=kwargs['course_version'],
             subtree_edited_date=kwargs['subtree_edited_date'],  # TODO: required, or default to now?
             earned_all=kwargs['earned_all'],
