@@ -76,6 +76,11 @@ class TextbooksTest(StudioCourseTest):
         self.textbook_view_page.visit()
 
         self.textbook_view_page.switch_to_pdf_frame(self)
+        self.textbook_view_page.a11y_audit.config.set_scope({
+            'exclude': [
+                '#viewer',  # PDF viewer (vendor file)
+            ]
+        })
         self.textbook_view_page.a11y_audit.config.set_rules({
             'ignore': [
                 'color-contrast',  # will always fail because pdf.js converts pdf to divs with transparent text
