@@ -5,9 +5,9 @@
  * XBlock field's value if it has been changed. If the user presses Escape, then any changes will
  * be removed and the input hidden again.
  */
-define(["js/views/baseview", "js/views/utils/xblock_utils", "edx-ui-toolkit/js/utils/html-utils"],
-    function (BaseView, XBlockViewUtils, HtmlUtils) {
-
+define(['js/views/baseview', 'js/views/utils/xblock_utils', 'edx-ui-toolkit/js/utils/html-utils'],
+    function (BaseView, XBlockViewUtils, HtmlUtils){
+        'use strict';
         var XBlockStringFieldEditor = BaseView.extend({
             events: {
                 'click .xblock-field-value-edit': 'showInput',
