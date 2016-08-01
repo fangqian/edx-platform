@@ -46,6 +46,54 @@ define(['backbone',
                 );
             });
 
+            it("update time zone dropdown after country dropdown changes", function () {
+                requests = AjaxHelpers.requests(this);
+                var selector = '.u-field-value > select';
+                var options = '.u-field-value > select > optgroup > option';
+
+                var timeZoneData = FieldViewsSpecHelpers.createFieldData(AccountSettingsFieldViews.TimeZoneFieldView, {
+                    valueAttribute: 'time_zone',
+                    preOptions: [
+                        {'time_zone': 'America/Cayman', 'description': 'America/Cayman (EST, UTC-0500)'},
+                        {'time_zone': 'Pacific/Kosrae', 'description': 'Pacific/Kosrae (KOST, UTC+1100)'}
+                    ],
+                    options: FieldViewsSpecHelpers.SELECT_OPTIONS,
+                    persistChanges: true
+                });
+
+                var countryData = FieldViewsSpecHelpers.createFieldData(AccountSettingsFieldViews.CountryFieldView, {
+                    valueAttribute: 'country',
+                    options: [['KY', "Cayman Islands"], ['CA', 'Canada'], ['GY', 'Guyana']],
+                    persistChanges: true
+                });
+
+                var timeZoneView = new AccountSettingsFieldViews.TimeZoneFieldView(timeZoneData).render();
+                var countryView = new AccountSettingsFieldViews.CountryFieldView(countryData).render();
+
+                expect(timeZoneView.$(options).length).toBe(6);
+                expect(timeZoneView.$(options)[0].value).toBe('America/Cayman');
+
+                var data = {'country': countryData.options[2][0]};
+                countryView.$(selector).val(data[countryData.valueAttribute]).change();
+
+                FieldViewsSpecHelpers.expectAjaxRequestWithData(requests, data);
+                AjaxHelpers.respondWithJson(requests, {"success": "true"});
+
+                AjaxHelpers.expectRequest(
+                    requests,
+                    'GET',
+                    '/user_api/v1/preferences/time_zones/?country_code=GY'
+                );
+                AjaxHelpers.respondWithJson(requests, [{
+                    'time_zone': 'America/Guyana',
+                    'description': 'America/Guyana (ECT, UTC-0500)'
+                }]);
+
+                expect(timeZoneView.$(options).length).toBe(5);
+                expect(timeZoneView.$(options)[0].value).toBe('America/Guyana');
+
+            });
+
             it("sends request to /i18n/setlang/ after changing language preference in LanguagePreferenceFieldView", function() {
                 requests = AjaxHelpers.requests(this);
 

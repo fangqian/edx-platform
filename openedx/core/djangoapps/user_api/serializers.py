@@ -4,7 +4,6 @@ Django REST Framework serializers for the User API application
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from openedx.core.lib.time_zone_utils import get_display_time_zone
 from student.models import UserProfile
 
 from .models import UserPreference

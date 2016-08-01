@@ -21,12 +21,11 @@
     <% } else { %>
         <select name="select" id="u-field-select-<%- id %>" aria-describedby="u-field-help-message-<%- id %>">
             <% if (preOptions) { %>
-                <optgroup label="Common Time Zone">
+                <optgroup label="Common Time Zones">
                 <% _.each(preOptions, function(time_zone) { %>
                    <option value="<%- time_zone.time_zone %>"><%- time_zone.description %></option>
                 <% }); %>
-                <option disabled>──────────</option>
-                <optgroup label="All Time Zone">
+                <optgroup label="All Time Zones">
             <% } %>
             <% if (showBlankOption) { %>
                 <option value=""></option>
