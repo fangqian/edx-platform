@@ -1069,10 +1069,27 @@ div.problem {
   div.capa_alert {
     margin-top: $baseline;
     padding: 8px 12px;
-    border: 1px solid #ebe8bf;
-    border-radius: 3px;
-    background: #fffcdd;
     font-size: 0.9em;
+
+    &.capa_alert_save {
+      @include notification-by-type($warning-color);
+    }
+  }
+
+  .submission_response {
+    padding: ($baseline * 0.4) ($baseline / 2);
+    &.correct,
+    &.partially-correct {
+      @include notification-by-type($success-color);
+    }
+    &.incorrect {
+      @include notification-by-type($error-color);
+    }
+  }
+
+  .review-btn {
+    @include float(right);
+    padding: $baseline / 10;
   }
 
   div.capa_reset {

@@ -187,3 +187,15 @@ $btn-small-padding-horizontal: spacing-horizontal(small);
   padding: 0.625rem 0.625rem;
   font-size: 14px;
 }
+
+// ----------------------------
+// Problem Notifications
+// ----------------------------
+
+@mixin notification-by-type($color) {
+  border-top: 3px solid $color;
+  .icon {
+    @include margin-right($baseline / 2);
+    color: $color;
+  }
+}

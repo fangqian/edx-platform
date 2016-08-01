@@ -28,6 +28,9 @@ class @Problem
     problem_prefix = @element_id.replace(/problem_/,'')
     @inputs = @$("[id^='input_#{problem_prefix}_']")
     @$('div.action button').click @refreshAnswers
+    @questionTitle = @$('h3.problem-header')
+    @reviewButton = @$('div.action button.review-btn')
+    @reviewButton.click @review_question_click
     @checkButton = @$('div.action button.check')
     @checkButtonLabel = @$('div.action button.check span.check-label')
     @checkButtonCheckText = @checkButtonLabel.text()
@@ -48,6 +51,12 @@ class @Problem
       window.globalTooltipManager.openTooltip icon
     @$('.clarification').blur (ev) =>
       window.globalTooltipManager.hide()
+
+    @$('.review-btn').focus (ev) =>
+      $(ev.target).removeClass('sr');
+
+    @$('.review-btn').blur (ev) =>
+      $(ev.target).addClass('sr');
 
     @bindResetCorrectness()
     if @checkButton.length
@@ -216,6 +225,12 @@ class @Problem
         flag = false
     return flag
 
+  # Review button click brings user back to top of problem
+  review_question_click: =>
+    console.log('review button clicked.');
+    $('html, body').animate({
+      scrollTop: @questionTitle.offset().top
+    }, 500);
 
   ###
   # 'check_fd' uses FormData to allow file submissions in the 'problem_check' dispatch,
@@ -409,7 +424,7 @@ class @Problem
   gentle_alert: (msg) =>
     if @el.find('.capa_alert').length
       @el.find('.capa_alert').remove()
-    alert_elem = "<div class='capa_alert'>" + msg + "</div>"
+    alert_elem = "<div class='capa_alert capa_alert_save'><span class='icon fa fa-floppy-o'></span>" + msg + "</div>"
     @el.find('.action').after(alert_elem)
     @el.find('.capa_alert').css(opacity: 0).animate(opacity: 1, 700)
     window.SR.readElts @el.find('.capa_alert')
