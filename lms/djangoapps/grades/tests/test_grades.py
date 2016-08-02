@@ -445,6 +445,10 @@ class TestGetModuleScore(LoginEnrollmentTestCase, SharedModuleStoreTestCase):
         self.request = get_request_for_user(UserFactory())
         self.client.login(username=self.request.user.username, password="test")
         CourseEnrollment.enroll(self.request.user, self.course.id)
+        # The call to get_module_score needs to be warmed up to make the following tests
+        # consistent in how many sql calls they make.  Otherwise the first call in
+        # one of the following tests will make 2 queries, chosen at random.
+        get_module_score(self.request.user, self.course, self.seq1)
 
     def test_get_module_score(self):
         """
@@ -452,7 +456,7 @@ class TestGetModuleScore(LoginEnrollmentTestCase, SharedModuleStoreTestCase):
         """
         # One query is for getting the list of disabled XBlocks (which is
         # then stored in the request).
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(1):
             score = get_module_score(self.request.user, self.course, self.seq1)
         self.assertEqual(score, 0)
 
