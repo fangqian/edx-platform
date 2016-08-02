@@ -98,10 +98,20 @@
                         url: '/user_api/v1/preferences/time_zones/',
                         data: {'country_code': user.attributes.country},
                         success: function (data) {
-                            var time_zones = $.map(data, function (time_zone_info) {
-                                return [[time_zone_info.time_zone, time_zone_info.description]];
+                            var countryTimeZones = $.map(data, function (timeZoneInfo) {
+                                return [[timeZoneInfo.time_zone, timeZoneInfo.description]];
                             });
-                            view.options.groupOptions[0]['selectOptions'] = time_zones;
+                            view.options.groupOptions = [
+                                {
+                                    'groupTitle': gettext("Country Time Zones"),
+                                    'selectOptions': countryTimeZones
+
+                                },
+                                {
+                                    'groupTitle': gettext("All Time Zones"),
+                                    'selectOptions': this.options.options
+                                }
+                            ];
                             view.render();
                         }
                     });
