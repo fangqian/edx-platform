@@ -39,8 +39,9 @@ class LmsIndexPageTest(BaseLmsIndexTest):
         """
         Perform a general validation of the index page, renders normally, no exceptions raised, etc.
         """
+        # import ipdb; ipdb.set_trace()
         self.assertTrue(self.page.banner_element.visible)
-        expected_links = [u'About', u'Blog', u'News', u'Help Center', u'Contact', u'Careers', u'Donate']
+        expected_links = [u'About', u'Blog', u'News', u'Help Center', u'Contact', u'Careers', u'Donate', u'Sitemap']
         self.assertEqual(self.page.footer_links, expected_links)
 
     def test_intro_video_hidden_by_default(self):
