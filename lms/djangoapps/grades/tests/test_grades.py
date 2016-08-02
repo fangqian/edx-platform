@@ -1,6 +1,10 @@
 """
 Test grade calculation.
 """
+
+import ddt
+
+from django.conf import settings
 from django.http import Http404
 from django.test import TestCase
 
@@ -24,7 +28,7 @@ from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from .. import course_grades
 from ..course_grades import summary as grades_summary
 from ..module_grades import get_module_score
-from ..new.course_grade import CourseGrade
+from ..new.course_grade import CourseGrade, CourseGradeFactory
 
 
 def _grade_with_errors(student, course):
@@ -267,6 +271,68 @@ class TestProgressSummary(TestCase):
         earned, possible = self.course_grade.score_for_module(self.loc_m)
         self.assertEqual(earned, 0)
         self.assertEqual(possible, 0)
+
+
+@ddt.ddt
+class TestCourseGradeFactory(SharedModuleStoreTestCase):
+    """
+    Test that CourseGrades are calculated properly
+    """
+    @classmethod
+    def setUpClass(cls):
+        super(TestCourseGradeFactory, cls).setUpClass()
+        cls.course = CourseFactory.create()
+        cls.chapter = ItemFactory.create(
+            parent=cls.course,
+            category="chapter",
+            display_name="Test Chapter"
+        )
+        cls.sequence = ItemFactory.create(
+            parent=cls.chapter,
+            category='sequential',
+            display_name="Test Sequential 1",
+            graded=True
+        )
+        cls.vertical = ItemFactory.create(
+            parent=cls.sequence,
+            category='vertical',
+            display_name='Test Vertical 1'
+        )
+        problem_xml = MultipleChoiceResponseXMLFactory().build_xml(
+            question_text='The correct answer is Choice 3',
+            choices=[False, False, True, False],
+            choice_names=['choice_0', 'choice_1', 'choice_2', 'choice_3']
+        )
+        cls.problem = ItemFactory.create(
+            parent=cls.vertical,
+            category="problem",
+            display_name="Test Problem",
+            data=problem_xml
+        )
+
+    def setUp(self):
+        """
+        Set up test course
+        """
+        super(TestCourseGradeFactory, self).setUp()
+        self.request = get_request_for_user(UserFactory())
+        self.client.login(username=self.request.user.username, password="test")
+        CourseEnrollment.enroll(self.request.user, self.course.id)
+
+    @ddt.data(
+        (True, True),
+        (True, False),
+        (False, True),
+        (False, False),
+    )
+    @ddt.unpack
+    def test_course_grade_with_feature_flag(self, feature_flag, course_setting):
+        grade_factory = CourseGradeFactory(self.request.user)
+        with patch('lms.djangoapps.grades.new.course_grade._pretend_to_save_course_grades') as mock_save_grades:
+            with patch.dict(settings.FEATURES, {'ENABLE_SUBSECTION_GRADES_SAVED': feature_flag}):
+                with patch.object(self.course, 'enable_subsection_grades_saved', new=course_setting):
+                    grade_factory.create(self.course)
+        self.assertEqual(mock_save_grades.called, feature_flag and course_setting)
 
 
 class TestGetModuleScore(LoginEnrollmentTestCase, SharedModuleStoreTestCase):

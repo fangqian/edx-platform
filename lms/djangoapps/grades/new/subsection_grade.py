@@ -4,6 +4,8 @@ SubsectionGrade Class
 from collections import OrderedDict
 from lazy import lazy
 
+from django.conf import settings
+
 from courseware.model_data import ScoresClient
 from lms.djangoapps.grades.scores import get_score, possibly_scored
 from student.models import anonymous_id_for_user
@@ -107,7 +109,7 @@ class SubsectionGradeFactory(object):
         """
         Returns the saved grade for the given course and student.
         """
-        if course.enable_subsection_grades_saved:
+        if settings.FEATURES.get('ENABLE_SUBSECTION_GRADES_SAVED') and course.enable_subsection_grades_saved:
             # TODO Retrieve the saved grade for the subsection, if it exists.
             pass
 
@@ -115,7 +117,7 @@ class SubsectionGradeFactory(object):
         """
         Returns the saved grade for the given course and student.
         """
-        if course.enable_subsection_grades_saved:
+        if settings.FEATURES.get('ENABLE_SUBSECTION_GRADES_SAVED') and course.enable_subsection_grades_saved:
             # TODO Update the saved grade for the subsection.
             pass
 
