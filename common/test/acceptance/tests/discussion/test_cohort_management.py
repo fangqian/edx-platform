@@ -483,7 +483,7 @@ class CohortConfigurationTest(EventsTestMixin, UniqueCourseTest, CohortTestMixin
         When I view the cohort in the LMS instructor dashboard
         There is a link to take me to the Data Download section of the Instructor Dashboard.
         """
-        self.cohort_management_page.select_data_download()
+        self.instructor_dashboard_page.select_data_download()
         data_download_page = DataDownloadPage(self.browser)
         data_download_page.wait_for_page()
 

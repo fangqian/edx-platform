@@ -6,7 +6,7 @@
  * be removed and the input hidden again.
  */
 define(['js/views/baseview', 'js/views/utils/xblock_utils', 'edx-ui-toolkit/js/utils/html-utils'],
-    function (BaseView, XBlockViewUtils, HtmlUtils){
+    function(BaseView, XBlockViewUtils, HtmlUtils) {
         'use strict';
         var XBlockStringFieldEditor = BaseView.extend({
             events: {
