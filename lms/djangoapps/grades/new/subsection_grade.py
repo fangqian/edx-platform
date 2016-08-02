@@ -12,8 +12,6 @@ from submissions import api as submissions_api
 from xmodule import block_metadata_utils, graders
 from xmodule.graders import Score
 
-import datetime
-
 
 class SubsectionGrade(object):
     """
@@ -70,7 +68,7 @@ class SubsectionGrade(object):
             user_id=student.id,
             usage_key=self.location,
             course_version=course.course_version,
-            subtree_edited_date=datetime.datetime.now(),  # TODO: use a real value here
+            subtree_edited_date=subsection.subtree_edited_on,
             earned_all=self.all_total.earned,
             possible_all=self.all_total.possible,
             earned_graded=self.graded_total.earned,
