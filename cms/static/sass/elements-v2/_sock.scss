@@ -27,7 +27,7 @@
 
     .cta-show-sock {
       @extend %ui-btn-pill;
-      background: rgb(245, 245, 245); // UXPL graycale, x-back
+      background: $uxpl-grayscale-x-back;
       font-size: font-size(x-small);
       padding: ($baseline/2) $baseline;
       color: $gray-d3;
