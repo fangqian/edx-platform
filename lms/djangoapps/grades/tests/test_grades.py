@@ -326,7 +326,9 @@ class TestCourseGradeFactory(SharedModuleStoreTestCase):
         (False, False),
     )
     @ddt.unpack
-    def test_course_grade_with_feature_flag(self, feature_flag, course_setting):
+    def test_course_grade_feature_gating(self, feature_flag, course_setting):
+        # Grades are only saved if the feature flag and the advanced setting are
+        # both set to True.
         grade_factory = CourseGradeFactory(self.request.user)
         with patch('lms.djangoapps.grades.new.course_grade._pretend_to_save_course_grades') as mock_save_grades:
             with patch.dict(settings.FEATURES, {'ENABLE_SUBSECTION_GRADES_SAVED': feature_flag}):
