@@ -5,8 +5,8 @@ from collections import OrderedDict
 from lazy import lazy
 
 from courseware.model_data import ScoresClient
-from grades.scores import get_score, possibly_scored
-from grades.models import PersistentSubsectionGradeModel
+from lms.djangoapps.grades.scores import get_score, possibly_scored
+from lms.djangoapps.grades.models import PersistentSubsectionGradeModel
 from student.models import anonymous_id_for_user
 from submissions import api as submissions_api
 from xmodule import block_metadata_utils, graders
