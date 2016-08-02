@@ -252,7 +252,7 @@ define('WordCloudMain', [], function () {
                 .data(words)
                 .enter()
                 .append('g')
-                .attr('aria-describedby', function(d) {
+                .attr('aria-labelledby', function(d) {
                     return 'text_word_' + d.text + ' title_word_' + d.text;
                 });
 
