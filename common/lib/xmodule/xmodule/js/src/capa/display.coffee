@@ -834,6 +834,6 @@ class @Problem
         MathJax.Hub
         hint_container[0]
       ]
-      hint_container.attr('hint_index', response.hint_index)
+      hint_container.addClass('hint-shown').attr('hint_index', response.hint_index)
       @$('.hint-button').focus()  # a11y focus on click, like the Check button
 
