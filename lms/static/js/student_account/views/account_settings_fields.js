@@ -109,7 +109,7 @@
                                 },
                                 {
                                     'groupTitle': gettext("All Time Zones"),
-                                    'selectOptions': this.options.options
+                                    'selectOptions': view.options.options
                                 }
                             ];
                             view.render();
