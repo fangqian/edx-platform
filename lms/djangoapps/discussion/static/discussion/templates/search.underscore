@@ -1,0 +1,9 @@
+<label class="field-label sr-only" for="search">Search all posts</label>
+<input
+    class="field-input input-text search"
+    type="search"
+    name="search"
+    placeholder="Search all posts"
+    aria-describedby="search-hint"
+/>
+<button class="btn-brand btn-small search" type="button">Search</button>

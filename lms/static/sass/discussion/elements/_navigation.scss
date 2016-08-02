@@ -20,10 +20,7 @@
 
 .forum-nav-browse {
     box-sizing: border-box;
-    // TODO: don't use table-cell for layout purposes as it switches the screenreader mode
-    display: table-cell;
-    vertical-align: middle;
-    width: auto;
+    width: 100%;
     padding: 11px;
     border: 0;
     border-radius: 0;
@@ -52,28 +49,6 @@
 
 .forum-nav-browse-drop-arrow {
   @include margin-left($baseline/4);
-}
-
-.forum-nav-search {
-  box-sizing: border-box;
-  // TODO: don't use table-cell for layout purposes as it switches the screenreader mode
-  display: table-cell;
-  position: relative;
-  vertical-align: middle;
-  width: 50%;
-  padding: ($baseline/4);
-}
-
-.forum-nav-search .icon {
-  font-size: $forum-small-font-size;
-  position: absolute;
-  margin-top: -6px;
-  top: 50%;
-  @include right($baseline/4 + 1px + $baseline / 4); // Wrapper padding + border + input padding
-}
-
-.forum-nav-search-input {
-  width: 100%;
 }
 
 // -----------
