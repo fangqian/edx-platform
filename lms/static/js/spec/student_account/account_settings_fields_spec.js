@@ -49,28 +49,43 @@ define(['backbone',
             it("update time zone dropdown after country dropdown changes", function () {
                 requests = AjaxHelpers.requests(this);
                 var selector = '.u-field-value > select';
+                var groups = '.u-field-value > select > optgroup';
                 var options = '.u-field-value > select > optgroup > option';
+
+                var timeZones = [
+                    ['America/Cayman', 'America/Cayman (EST, UTC-0500)'],
+                    ['Pacific/Kosrae', 'Pacific/Kosrae (KOST, UTC+1100)']
+                ];
 
                 var timeZoneData = FieldViewsSpecHelpers.createFieldData(AccountSettingsFieldViews.TimeZoneFieldView, {
                     valueAttribute: 'time_zone',
-                    preOptions: [
-                        {'time_zone': 'America/Cayman', 'description': 'America/Cayman (EST, UTC-0500)'},
-                        {'time_zone': 'Pacific/Kosrae', 'description': 'Pacific/Kosrae (KOST, UTC+1100)'}
+                    groupOptions: [
+                        {
+                            'groupTitle': gettext('Country Time Zones'),
+                            'selectOptions': timeZones
+                        },
+                        {
+                            'groupTitle': gettext('All Time Zones'),
+                            'selectOptions': FieldViewsSpecHelpers.SELECT_OPTIONS
+                        }
                     ],
-                    options: FieldViewsSpecHelpers.SELECT_OPTIONS,
                     persistChanges: true
                 });
 
-                var countryData = FieldViewsSpecHelpers.createFieldData(AccountSettingsFieldViews.CountryFieldView, {
+                var countryData = FieldViewsSpecHelpers.createFieldData(AccountSettingsFieldViews.DropdownFieldView, {
                     valueAttribute: 'country',
                     options: [['KY', "Cayman Islands"], ['CA', 'Canada'], ['GY', 'Guyana']],
                     persistChanges: true
                 });
 
                 var timeZoneView = new AccountSettingsFieldViews.TimeZoneFieldView(timeZoneData).render();
-                var countryView = new AccountSettingsFieldViews.CountryFieldView(countryData).render();
+                var countryView = new AccountSettingsFieldViews.DropdownFieldView(countryData).render();
 
-                expect(timeZoneView.$(options).length).toBe(6);
+                timeZoneView.listenToCountryView(countryView);
+
+                expect(timeZoneView.$(groups).length).toBe(2);
+
+                expect(timeZoneView.$(options).length).toBe(5);
                 expect(timeZoneView.$(options)[0].value).toBe('America/Cayman');
 
                 var data = {'country': countryData.options[2][0]};
@@ -89,7 +104,7 @@ define(['backbone',
                     'description': 'America/Guyana (ECT, UTC-0500)'
                 }]);
 
-                expect(timeZoneView.$(options).length).toBe(5);
+                expect(timeZoneView.$(options).length).toBe(4);
                 expect(timeZoneView.$(options)[0].value).toBe('America/Guyana');
 
             });

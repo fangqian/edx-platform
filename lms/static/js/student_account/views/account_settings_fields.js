@@ -27,7 +27,6 @@
         HtmlUtils
     )
     {
-        var vent = _.extend({}, Backbone.Events);
 
         var AccountSettingsFieldViews = {
             ReadonlyFieldView: FieldViews.ReadonlyFieldView.extend({
@@ -83,32 +82,31 @@
                 fieldTemplate: field_dropdown_account_template,
 
                 initialize: function (options) {
-                    _.bindAll(this, 'updateList');
+                    this.options = _.extend({}, options);
+                    _.bindAll(this, 'updateList', 'listenToCountryView');
                     this._super(options);
-                    vent.on('change', this.updateList);
                 },
 
-                updateList: function (country_code) {
+                listenToCountryView: function (view) {
+                    this.listenTo(view.model, 'change:country', this.updateList);
+                },
+
+                updateList: function (user) {
                     var view = this;
                     $.ajax({
                         type: 'GET',
                         url: '/user_api/v1/preferences/time_zones/',
-                        data: {'country_code': country_code},
+                        data: {'country_code': user.attributes.country},
                         success: function (data) {
-                            view.options.preOptions = data;
+                            var time_zones = $.map(data, function (time_zone_info) {
+                                return [[time_zone_info.time_zone, time_zone_info.description]];
+                            });
+                            view.options.groupOptions[0]['selectOptions'] = time_zones;
                             view.render();
                         }
                     });
                 }
 
-            }),
-            CountryFieldView: FieldViews.DropdownFieldView.extend({
-                fieldTemplate: field_dropdown_account_template,
-
-                saveSucceeded: function () {
-                    vent.trigger('change', this.fieldValue);
-                    this._super();
-                }
             }),
             PasswordFieldView: FieldViews.LinkFieldView.extend({
                 fieldType: 'button',

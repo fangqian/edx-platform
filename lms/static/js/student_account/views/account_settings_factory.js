@@ -101,7 +101,7 @@
                             })
                         },
                         {
-                            view: new AccountSettingsFieldViews.CountryFieldView({
+                            view: new AccountSettingsFieldViews.DropdownFieldView({
                                 model: userAccountModel,
                                 required: true,
                                 title: gettext('Country or Region'),
@@ -121,8 +121,16 @@
                                     'time zone here, course dates, including assignment deadlines, are displayed in ' +
                                     'Coordinated Universal Time (UTC).'
                                 ),
-                                preOptions: fieldsData.time_zone.preOptions,
-                                options: fieldsData.time_zone.options,
+                                groupOptions: [
+                                    {
+                                        'groupTitle': gettext("Country Time Zones"),
+                                        'selectOptions': fieldsData.time_zone.countryTimeZones
+                                    },
+                                    {
+                                        'groupTitle': gettext("All Time Zones"),
+                                        'selectOptions': fieldsData.time_zone.options
+                                    }
+                                ],
                                 persistChanges: true
                             })
                         }
@@ -170,6 +178,8 @@
                     ]
                 }
             ];
+
+            aboutSectionsData[0]['fields'][6]['view'].listenToCountryView(aboutSectionsData[0]['fields'][5]['view']);
 
             accountsSectionData = [
                 {

@@ -20,18 +20,16 @@
         <span class="u-field-value-readonly"></span>
     <% } else { %>
         <select name="select" id="u-field-select-<%- id %>" aria-describedby="u-field-help-message-<%- id %>">
-            <% if (preOptions) { %>
-                <optgroup label="Common Time Zones">
-                <% _.each(preOptions, function(time_zone) { %>
-                   <option value="<%- time_zone.time_zone %>"><%- time_zone.description %></option>
-                <% }); %>
-                <optgroup label="All Time Zones">
-            <% } %>
             <% if (showBlankOption) { %>
                 <option value=""></option>
             <% } %>
-            <% _.each(selectOptions, function(selectOption) { %>
-                <option value="<%- selectOption[0] %>"><%- selectOption[1] %></option>
+            <% _.each(groupOptions, function(groupOption) { %>
+                <% if (groupOption.groupTitle != null) { %>
+                    <optgroup label="<%- groupOption.groupTitle %>">
+                <% } %>
+                <% _.each(groupOption.selectOptions, function(selectOption) { %>
+                    <option value="<%- selectOption[0] %>"><%- selectOption[1] %></option>
+                <% }); %>
             <% }); %>
         </select>
         <span class="icon-caret-down" aria-hidden="true"></span>

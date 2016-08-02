@@ -455,7 +455,6 @@ def account_settings_context(request):
             }, 'preferred_language': {
                 'options': all_languages(),
             }, 'time_zone': {
-                'preOptions': get_country_time_zones(user.profile.country.code) if user.profile.country is not None else None,
                 'options': TIME_ZONE_CHOICES,
             }
         },

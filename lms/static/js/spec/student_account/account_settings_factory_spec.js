@@ -31,7 +31,7 @@ define(['backbone',
                 }, 'preferred_language': {
                     'options': Helpers.FIELD_OPTIONS
                 }, 'time_zone': {
-                    'options': Helpers.FIELD_OPTIONS,
+                    'options': Helpers.FIELD_OPTIONS
                 }
             };
 
@@ -111,6 +111,14 @@ define(['backbone',
 
                 request = requests[1];
                 expect(request.method).toBe('GET');
+                expect(request.url).toBe('/user_api/v1/preferences/time_zones/?country_code=1');
+                AjaxHelpers.respondWithJson(requests, [{
+                    'time_zone': 'America/Guyana',
+                    'description': 'America/Guyana (ECT, UTC-0500)'
+                }]);
+
+                request = requests[2];
+                expect(request.method).toBe('GET');
                 expect(request.url).toBe(Helpers.USER_PREFERENCES_API_URL);
 
                 AjaxHelpers.respondWithError(requests, 500);
@@ -130,6 +138,10 @@ define(['backbone',
                 Helpers.expectSettingsSectionsButNotFieldsToBeRendered(accountSettingsView);
 
                 AjaxHelpers.respondWithJson(requests, Helpers.createAccountSettingsData());
+                AjaxHelpers.respondWithJson(requests, [{
+                    'time_zone': 'America/Guyana',
+                    'description': 'America/Guyana (ECT, UTC-0500)'
+                }]);
                 AjaxHelpers.respondWithJson(requests, Helpers.createUserPreferencesData());
 
                 Helpers.expectLoadingIndicatorIsVisible(accountSettingsView, false);
@@ -145,6 +157,10 @@ define(['backbone',
                 var accountSettingsView = createAccountSettingsPage();
 
                 AjaxHelpers.respondWithJson(requests, Helpers.createAccountSettingsData());
+                AjaxHelpers.respondWithJson(requests, [{
+                    'time_zone': 'America/Guyana',
+                    'description': 'America/Guyana (ECT, UTC-0500)'
+                }]);
                 AjaxHelpers.respondWithJson(requests, Helpers.createUserPreferencesData());
                 AjaxHelpers.respondWithJson(requests, {});  // Page viewed analytics event
 
