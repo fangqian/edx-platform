@@ -253,13 +253,13 @@ define('WordCloudMain', [], function () {
                 .enter()
                 .append('g')
                 .attr('aria-describedby', function(d) {
-                    return 'text_word_' + d.text + ' ' + 'title_word_' + d.text;
+                    return 'text_word_' + d.text + ' title_word_' + d.text;
                 });
 
         groupEl
             .append('title')
             .attr('id', function(d) {
-                return 'title_word_' + d.text
+                return 'title_word_' + d.text;
             })
             .text(function (d) {
                 var res = '';
@@ -278,7 +278,7 @@ define('WordCloudMain', [], function () {
         groupEl
             .append('text')
             .attr('id', function(d) {
-                return 'text_word_' + d.text
+                return 'text_word_' + d.text;
             })
             .style('font-size', function (d) {
                 return d.size + 'px';

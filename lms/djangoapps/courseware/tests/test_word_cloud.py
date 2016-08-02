@@ -248,6 +248,7 @@ class TestWordCloud(BaseTestXmodule):
             'ajax_url': self.item_descriptor.xmodule_runtime.ajax_url,
             'element_class': self.item_descriptor.location.category,
             'element_id': self.item_descriptor.location.html_id(),
+            'instructions': 'List your five favorite foods.',
             'num_inputs': 5,  # default value
             'submitted': False  # default value
         }
