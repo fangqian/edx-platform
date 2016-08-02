@@ -660,6 +660,8 @@
             DiscussionThreadListView.prototype.performSearch = function($searchInput) {
                 this.hideBrowseMenu();
                 this.setCurrentTopicDisplay(gettext("Search Results"));
+                // trigger this event so the breadcrumbs can update as well
+                this.trigger('search:initiated');
                 this.searchFor($searchInput.val(), $searchInput);
             };
 

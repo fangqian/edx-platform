@@ -24,7 +24,8 @@
                     router,
                     breadcrumbs,
                     BreadcrumbsModel,
-                    searchBox;
+                    searchBox,
+                    routerEvents;
 
                 // TODO: Perhaps eliminate usage of global variables when possible
                 window.DiscussionUtil.loadRoles(options.roles);
@@ -55,6 +56,7 @@
                 });
                 router.start();
 
+                // Initialize and render breadcrumbs
                 BreadcrumbsModel = Backbone.Model.extend({
                     defaults: {
                         contents: [],
@@ -74,20 +76,29 @@
                     }
                 }).render();
 
-                // Add new breadcrumbs and clear search box when the user selects topics
-                router.nav.on('topic:selected', function(topic) {
-                    breadcrumbs.model.set('contents', topic);
-                });
-
-                // initialize search box
+                // Initialize and render search box
                 searchBox = new DiscussionSearchView({
                     el: $('.forum-search'),
                     threadListView: router.nav,
                 }).render();
 
-                // Clear search box when a thread is selected
-                router.nav.on('thread:selected', function() {
-                    searchBox.clearSearch();
+                routerEvents = {
+                    // Add new breadcrumbs and clear search box when the user selects topics
+                    'topic:selected': function(topic) {
+                        breadcrumbs.model.set('contents', topic);
+                    },
+                    // Clear search box when a thread is selected
+                    'thread:selected': function() {
+                        searchBox.clearSearch();
+                    },
+                    // Add 'Search Results' to breadcrumbs when user searches
+                    'search:initiated': function() {
+                        breadcrumbs.model.set('contents', ['Search Results']);
+                    }
+                };
+
+                Object.keys(routerEvents).forEach(function(key) {
+                    router.nav.on(key, routerEvents[key]);
                 });
             };
         });
