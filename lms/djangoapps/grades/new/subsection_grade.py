@@ -6,20 +6,13 @@ from lazy import lazy
 
 from courseware.model_data import ScoresClient
 from lms.djangoapps.grades.scores import get_score, possibly_scored
-from lms.djangoapps.grades.models import PersistentSubsectionGradeModel
+from lms.djangoapps.grades.models import BlockRecord, PersistentSubsectionGradeModel
 from student.models import anonymous_id_for_user
 from submissions import api as submissions_api
 from xmodule import block_metadata_utils, graders
 from xmodule.graders import Score
 
-
-
-# TODO
-# Note: If the problem weight changes after the grade is saved,
-# it may be confusing to the student since the scores won't add
-# up.  So consider saving the problem-weight along with the
-# visible_block_ids.  It would still be shared across multiple
-# users who saw the subsection with the same course-version.
+import datetime
 
 
 class SubsectionGrade(object):
@@ -44,7 +37,7 @@ class SubsectionGrade(object):
         """
         List of all problem scores in the subsection.
         """
-        return list(self.locations_to_scores.itervalues())
+        return [score for score, weight in self.locations_to_scores.itervalues()]
 
     def compute(self, student, course_structure, scores_client, submissions_scores):
         """
@@ -62,17 +55,27 @@ class SubsectionGrade(object):
         """
         Persist the SubsectionGrade.
         """
-        # shouldn't need to pass course_id to the model API since it's retrievable from the block_key
-        PersistentSubsectionGradeModel.save_grade(
-            user=student,
-            subtree_edited_data=subsection.subtree_edited_date,
-            block_key=self.location,
+        visible_blocks = []
+        for location, (score, weight) in self.locations_to_scores.iteritems():
+            visible_blocks.append(
+                BlockRecord(
+                    {
+                        'weight': weight,
+                        'max_score': score.possible,
+                        'id': location,
+                    }
+                )
+            )
+        PersistentSubsectionGradeModel.create_grade(
+            user_id=student.id,
+            usage_key=self.location,
             course_version=course.course_version,
-            visible_block_keys=self.locations_to_scores.keys(),
-            earned_all=self.all_total.total_correct,
-            possible_all=self.all_total.total_possible,
-            earned_graded=self.graded_total.total_correct,
-            possible_graded=self.graded_total.total_possible,
+            subtree_edited_date=datetime.datetime.now(),  # TODO: use a real value here
+            earned_all=self.all_total.earned,
+            possible_all=self.all_total.possible,
+            earned_graded=self.graded_total.earned,
+            possible_graded=self.graded_total.possible,
+            visible_blocks=visible_blocks,
         )
 
     def load_from_data(self, model, course_structure, scores_client, submissions_scores):
@@ -114,12 +117,15 @@ class SubsectionGrade(object):
                 # cannot grade a problem with a denominator of 0
                 block_graded = block.graded if possible > 0 else False
 
-                self.locations_to_scores[block.location] = Score(
-                    earned,
-                    possible,
-                    block_graded,
-                    block_metadata_utils.display_name_with_default_escaped(block),
-                    block.location,
+                self.locations_to_scores[block.location] = (
+                    Score(
+                        earned,
+                        possible,
+                        block_graded,
+                        block_metadata_utils.display_name_with_default_escaped(block),
+                        block.location,
+                    ),
+                    block.weight,
                 )
 
 
@@ -157,9 +163,7 @@ class SubsectionGradeFactory(object):
         Returns the saved grade for the student and subsection.
         """
         if course.enable_subsection_grades_saved:
-            # TODO Retrieve the saved grade for the subsection, if it exists.
-            pass
-            model = PersistentSubsectionGradeModel.get_grade(
+            model = PersistentSubsectionGradeModel.read_grade(
                 user=self.student,
                 block_key=subsection.location,
             )
@@ -171,10 +175,8 @@ class SubsectionGradeFactory(object):
         """
         Updates the saved grade for the student and subsection.
         """
-        if course.enable_subsection_grades_saved:
-            # TODO Update the saved grade for the subsection.
-            pass
-            subsection_grade.save(self.student, subsection, course)
+        #if course.enable_subsection_grades_saved:
+        subsection_grade.save(self.student, subsection, course)
 
     def _prefetch_scores(self, course_structure, course):
         """

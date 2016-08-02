@@ -19,20 +19,20 @@ class VisibleBlocksModel(models.Model):
     _blocks_json = models.TextField(db_column="blocks_json")
     hashed = models.CharField(max_length=32, primary_key=True)
 
-    def __init__(self, *args, **kwargs):
+    @classmethod
+    def create(cls, blocks):
         """
-        Creates a new VisibleBlocksModel. Keyword argument 'blocks' should be an array of BlockRecords. KeyError will
-        be raised if this argument is not present.
+        Creates a new VisibleBlocksModel. Argument 'blocks' should be an array of BlockRecords.
         """
-        blocks = kwargs.pop('blocks')
-        super(VisibleBlocksModel, self).__init__(*args, **kwargs)
-        self._blocks_json = json.dumps(
+        _blocks_json = json.dumps(
             [
-                block.to_json()
+                block.to_dict()
                 for block in blocks
             ]
         )
-        self.hashed = md5(self._blocks_json).hexdigest()
+        hashed = md5(_blocks_json).hexdigest()
+        model, created = cls.objects.get_or_create(hashed=hashed, defaults={'_blocks_json': _blocks_json})
+        return model
 
     @property
     def blocks(self):
@@ -66,17 +66,15 @@ class BlockRecord(object):
         self.max_score = value_dict['max_score']
         self.id = value_dict['id']
 
-    def to_json(self):
+    def to_dict(self):
         """
-        Serialize this object to json.
+        Serialize this object to a dict object.
         """
-        return json.dumps(
-            {
-                'weight': self.weight,
-                'max_score': self.max_score,
-                'id': self.id,
-            }
-        )
+        return {
+            'weight': self.weight,
+            'max_score': self.max_score,
+            'id': self.id._to_string(),
+        }
 
 
 class PersistentSubsectionGradeModel(TimeStampedModel):
@@ -124,21 +122,11 @@ class PersistentSubsectionGradeModel(TimeStampedModel):
             possible_graded: 8
             visible_blocks: [<list of BlockRecord objects>] <--- this is still up for debate
         """
-        # TODO: do we require visible_blocks to be precalculated and passed in here, or can we calculate them given the block_key and user_id?
-        visible_blocks = [  # using a hard-coded sample until ^ is resolved
-            BlockRecord(
-                {
-                    'weight': 0,
-                    'max_score': 0,
-                    'id': 'lol_idk?12345!'
-                }
-            )
-        ]
-        visible_blocks_model = VisibleBlocksModel.objects.get_or_create(blocks=visible_blocks)
+        visible_blocks_model = VisibleBlocksModel.create(blocks=kwargs['visible_blocks'])
 
         model = cls.objects.create(
             user_id=kwargs['user_id'],
-            course_id=kwargs['usage_key'].course_key(),
+            course_id=kwargs['usage_key'].course_key,
             usage_key=kwargs['usage_key'],
             course_version=kwargs['course_version'],
             subtree_edited_date=kwargs['subtree_edited_date'],  # TODO: required, or default to now?
