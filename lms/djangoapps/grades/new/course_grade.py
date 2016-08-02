@@ -201,8 +201,9 @@ class CourseGradeFactory(object):
             # TODO LATER Retrieve the saved grade for the course, if it exists.
             _pretend_to_save_course_grades()
 
+
 def _pretend_to_save_course_grades():
     """
-    Stub to facilitate testing feature flag until course lands
+    Stub to facilitate testing feature flag until robust grade work lands.
     """
     pass

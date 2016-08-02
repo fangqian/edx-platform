@@ -119,7 +119,7 @@ class SubsectionGradeFactory(object):
         """
         if settings.FEATURES.get('ENABLE_SUBSECTION_GRADES_SAVED') and course.enable_subsection_grades_saved:
             # TODO Update the saved grade for the subsection.
-            pass
+            _pretend_to_save_subsection_grades()
 
     def _prefetch_scores(self, course_structure, course):
         """
@@ -133,3 +133,10 @@ class SubsectionGradeFactory(object):
             self._submissions_scores = submissions_api.get_scores(
                 unicode(course.id), anonymous_id_for_user(self.student, course.id)
             )
+
+
+def _pretend_to_save_subsection_grades():
+    """
+    Stub to facilitate testing feature flag until robust grade work lands.
+    """
+    pass

@@ -3,23 +3,22 @@ Test grade calculation.
 """
 
 import ddt
-
 from django.conf import settings
 from django.http import Http404
 from django.test import TestCase
-
 from mock import patch, MagicMock
 from nose.plugins.attrib import attr
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from opaque_keys.edx.locator import CourseLocator, BlockUsageLocator
 
+from capa.tests.response_xml_factory import MultipleChoiceResponseXMLFactory
 from courseware.module_render import get_module
 from courseware.model_data import FieldDataCache, set_score
 from courseware.tests.helpers import (
     LoginEnrollmentTestCase,
     get_request_for_user
 )
-from capa.tests.response_xml_factory import MultipleChoiceResponseXMLFactory
+from lms.djangoapps.course_blocks.api import get_course_blocks
 from student.tests.factories import UserFactory
 from student.models import CourseEnrollment
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
@@ -29,6 +28,7 @@ from .. import course_grades
 from ..course_grades import summary as grades_summary
 from ..module_grades import get_module_score
 from ..new.course_grade import CourseGrade, CourseGradeFactory
+from ..new.subsection_grade import SubsectionGradeFactory
 
 
 def _grade_with_errors(student, course):
@@ -334,6 +334,25 @@ class TestCourseGradeFactory(SharedModuleStoreTestCase):
             with patch.dict(settings.FEATURES, {'ENABLE_SUBSECTION_GRADES_SAVED': feature_flag}):
                 with patch.object(self.course, 'enable_subsection_grades_saved', new=course_setting):
                     grade_factory.create(self.course)
+        self.assertEqual(mock_save_grades.called, feature_flag and course_setting)
+
+    @ddt.data(
+        (True, True),
+        (True, False),
+        (False, True),
+        (False, False),
+    )
+    @ddt.unpack
+    def test_subsection_grade_feature_gating(self, feature_flag, course_setting):
+        # Grades are only saved if the feature flag and the advanced setting are
+        # both set to True.
+        grade_factory = SubsectionGradeFactory(self.request.user)
+        course_structure = get_course_blocks(self.request.user, self.course.location)
+        with patch('lms.djangoapps.grades.new.subsection_grade._pretend_to_save_subsection_grades') \
+                as mock_save_grades:
+            with patch.dict(settings.FEATURES, {'ENABLE_SUBSECTION_GRADES_SAVED': feature_flag}):
+                with patch.object(self.course, 'enable_subsection_grades_saved', new=course_setting):
+                    grade_factory.create(self.sequence, course_structure, self.course)
         self.assertEqual(mock_save_grades.called, feature_flag and course_setting)
 
 
