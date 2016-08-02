@@ -50,26 +50,14 @@ define(['backbone',
                 requests = AjaxHelpers.requests(this);
                 var selector = '.u-field-value > select';
                 var groups = '.u-field-value > select > optgroup';
-                var options = '.u-field-value > select > optgroup > option';
-
-                var timeZones = [
-                    ['America/Cayman', 'America/Cayman (EST, UTC-0500)'],
-                    ['Pacific/Kosrae', 'Pacific/Kosrae (KOST, UTC+1100)']
-                ];
+                var groupOptions = '.u-field-value > select > optgroup > option';
+                var normalOptions = '.u-field-value > select > option';
 
                 var timeZoneData = FieldViewsSpecHelpers.createFieldData(AccountSettingsFieldViews.TimeZoneFieldView, {
                     valueAttribute: 'time_zone',
-                    groupOptions: [
-                        {
-                            'groupTitle': gettext('Country Time Zones'),
-                            'selectOptions': timeZones
-                        },
-                        {
-                            'groupTitle': gettext('All Time Zones'),
-                            'selectOptions': FieldViewsSpecHelpers.SELECT_OPTIONS
-                        }
-                    ],
-                    persistChanges: true
+                    options: FieldViewsSpecHelpers.SELECT_OPTIONS,
+                    persistChanges: true,
+                    required: true
                 });
 
                 var countryData = FieldViewsSpecHelpers.createFieldData(AccountSettingsFieldViews.DropdownFieldView, {
@@ -83,10 +71,9 @@ define(['backbone',
 
                 timeZoneView.listenToCountryView(countryView);
 
-                expect(timeZoneView.$(groups).length).toBe(2);
-
-                expect(timeZoneView.$(options).length).toBe(5);
-                expect(timeZoneView.$(options)[0].value).toBe('America/Cayman');
+                expect(timeZoneView.$(groups).length).toBe(0);
+                expect(timeZoneView.$(normalOptions).length).toBe(4);
+                expect(timeZoneView.$(normalOptions)[0].value).toBe('');
 
                 var data = {'country': countryData.options[2][0]};
                 countryView.$(selector).val(data[countryData.valueAttribute]).change();
@@ -99,14 +86,14 @@ define(['backbone',
                     'GET',
                     '/user_api/v1/preferences/time_zones/?country_code=GY'
                 );
-                AjaxHelpers.respondWithJson(requests, [{
-                    'time_zone': 'America/Guyana',
-                    'description': 'America/Guyana (ECT, UTC-0500)'
-                }]);
+                AjaxHelpers.respondWithJson(requests, [
+                    {'time_zone': 'America/Guyana', 'description': 'America/Guyana (ECT, UTC-0500)'},
+                    {'time_zone': 'Pacific/Kosrae', 'description': 'Pacific/Kosrae (KOST, UTC+1100)'}
+                ]);
 
-                expect(timeZoneView.$(options).length).toBe(4);
-                expect(timeZoneView.$(options)[0].value).toBe('America/Guyana');
-
+                expect(timeZoneView.$(groups).length).toBe(2);
+                expect(timeZoneView.$(groupOptions).length).toBe(5);
+                expect(timeZoneView.$(groupOptions)[0].value).toBe('America/Guyana');
             });
 
             it("sends request to /i18n/setlang/ after changing language preference in LanguagePreferenceFieldView", function() {
