@@ -1,7 +1,9 @@
 """
 Functionality for course-level grades.
 """
+from collections import namedtuple
 from logging import getLogger
+
 import dogstats_wrapper as dog_stats_api
 
 from opaque_keys.edx.keys import CourseKey
@@ -12,10 +14,15 @@ from .new.course_grade import CourseGradeFactory
 log = getLogger(__name__)
 
 
-def iterate_grades_for(course_or_id, students):
-    """Given a course_id and an iterable of students (User), yield a tuple of:
+GradeResult = namedtuple('StudentGrade', ['student', 'gradeset', 'err_msg'])
 
-    (student, gradeset, err_msg) for every student enrolled in the course.
+
+def iterate_grades_for(course_or_id, students):
+    """
+    Given a course_id and an iterable of students (User), yield a GradeResult
+    for every student enrolled in the course.  GradeResult is a named tuple of:
+
+    (student, gradeset, err_msg)
 
     If an error occurred, gradeset will be an empty dict and err_msg will be an
     exception message. If there was no error, err_msg is an empty string.
@@ -39,7 +46,7 @@ def iterate_grades_for(course_or_id, students):
         with dog_stats_api.timer('lms.grades.iterate_grades_for', tags=[u'action:{}'.format(course.id)]):
             try:
                 gradeset = summary(student, course)
-                yield student, gradeset, ""
+                yield GradeResult(student, gradeset, "")
             except Exception as exc:  # pylint: disable=broad-except
                 # Keep marching on even if this student couldn't be graded for
                 # some reason, but log it for future reference.
@@ -50,7 +57,7 @@ def iterate_grades_for(course_or_id, students):
                     course.id,
                     exc.message
                 )
-                yield student, {}, exc.message
+                yield GradeResult(student, {}, exc.message)
 
 
 def summary(student, course):
