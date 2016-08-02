@@ -50,6 +50,6 @@ from openedx.core.djangolib.markup import HTML
       ${_("You have used {num_used} of {num_total} submissions").format(num_used=attempts_used, num_total=attempts_allowed)}
     </div>
     % endif
-    <%include file="problem_notifications.html"/>
+    <%include file="problem_notifications.html" args="notification_type=notification_type,notification_icon=notification_icon,submission_response_message=submission_response_message,points_earned=points_earned,points_possible=points_possible"/>
   </div>
 </div>
