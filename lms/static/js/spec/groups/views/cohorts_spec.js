@@ -356,7 +356,7 @@ define(['backbone', 'jquery', 'edx-ui-toolkit/js/utils/spec-helpers/ajax-helpers
             beforeEach(function () {
                 setFixtures('<ul class="instructor-nav"><li class="nav-item"><button type="button" data-section=' +
                     '"cohort_management" class="active-section">Cohort Management</button></li></ul><div></div>' +
-                    '<div class="cohort-management"><div class="cohort-state-message"></div></div>');
+                    '<div class="cohort-management"><div class="cohort-state-message"></div></div>');  // eslint-disable-line no-undef
                 TemplateHelpers.installTemplate('templates/instructor/instructor_dashboard_2/cohorts');
                 TemplateHelpers.installTemplate('templates/instructor/instructor_dashboard_2/cohort-form');
                 TemplateHelpers.installTemplate('templates/instructor/instructor_dashboard_2/cohort-selector');
