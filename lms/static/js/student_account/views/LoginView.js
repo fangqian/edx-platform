@@ -1,14 +1,13 @@
 ;(function (define) {
     'use strict';
     define([
-            'jquery',
-            'underscore',
-            'gettext',
-            'edx-ui-toolkit/js/utils/html-utils',
-            'js/student_account/views/FormView'
+        'jquery',
+        'underscore',
+        'gettext',
+        'edx-ui-toolkit/js/utils/html-utils',
+        'js/student_account/views/FormView'
         ],
         function($, _, gettext, HtmlUtils, FormView) {
-
         return FormView.extend({
             el: '#login-form',
             tpl: '#login-tpl',
@@ -38,8 +37,10 @@
 
             render: function( html ) {
                 var fields = html || '';
-                this.successMessage = HtmlUtils.interpolateHtml(gettext('We have sent an email message with password reset instructions to the email address you provided.  If you do not receive this message, {anchorStart}contact technical support{anchorEnd}.'), {  // jshint ignore:line
-                    anchorStart: HtmlUtils.HTML('<a href="'+ this.supportURL + '">'),
+                this.successMessage = HtmlUtils.interpolateHtml(
+                    // eslint-disable-next-line
+                    gettext('We have sent an email message with password reset instructions to the email address you provided.  If you do not receive this message, {anchorStart}contact technical support{anchorEnd}.'), {  // jshint ignore:line
+                    anchorStart: HtmlUtils.HTML('<a href="' + this.supportURL + '">'),
                     anchorEnd: HtmlUtils.HTML('</a>')
                 });
 
